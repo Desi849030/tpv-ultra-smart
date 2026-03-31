@@ -39,6 +39,7 @@ jobs:
 
     - name: Cache buildozer
       uses: actions/cache@v4
+      continue-on-error: true
       with:
         path: |
           ~/.buildozer
@@ -64,11 +65,12 @@ jobs:
           sdkmanager --sdk_root=$SDK "build-tools;33.0.2" "platforms;android-33"
         fi
 
-    - name: Patch buildozer.spec for Cleartext
+    - name: Configure Buildozer for Cleartext
       run: |
-        # Agrega permiso para http en el manifest generado
+        # Esta es la forma segura de permitir http sin tocar el código python
         if [ -f buildozer.spec ]; then
-          echo "android.manifest_placeholders = [ android:usesCleartextTraffic=\"true\" ]" >> buildozer.spec
+          sed -i 's/^android.uses_cleartext_traffic = False/android.uses_cleartext_traffic = True/g' buildozer.spec || \
+          echo "android.uses_cleartext_traffic = True" >> buildozer.spec
         fi
 
     - name: Build APK
