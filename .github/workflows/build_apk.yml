@@ -44,9 +44,9 @@ jobs:
         path: |
           ~/.buildozer
           ~/.cache/pip
-        key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+        key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
         restore-keys: |
-          buildozer-${{ runner.os }}-
+          ${{ runner.os }}-buildozer-
 
     - name: Setup Android SDK
       run: |
@@ -68,7 +68,6 @@ jobs:
     - name: Configure Buildozer for Cleartext
       run: |
         if [ -f buildozer.spec ]; then
-          sed -i 's/^android.uses_cleartext_traffic = False/android.uses_cleartext_traffic = True/g' buildozer.spec || \
           echo "android.uses_cleartext_traffic = True" >> buildozer.spec
         fi
 
