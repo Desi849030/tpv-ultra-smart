@@ -67,7 +67,6 @@ jobs:
 
     - name: Configure Buildozer for Cleartext
       run: |
-        # Esta es la forma segura de permitir http sin tocar el código python
         if [ -f buildozer.spec ]; then
           sed -i 's/^android.uses_cleartext_traffic = False/android.uses_cleartext_traffic = True/g' buildozer.spec || \
           echo "android.uses_cleartext_traffic = True" >> buildozer.spec
